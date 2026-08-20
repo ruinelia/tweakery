@@ -10,7 +10,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
 public class TweakeryClient implements ClientModInitializer {
-
     private static final KeyMapping.Category TWEAKERY_CATEGORY = KeyMapping.Category.register(
             Identifier.fromNamespaceAndPath("tweakery", "category")
     );

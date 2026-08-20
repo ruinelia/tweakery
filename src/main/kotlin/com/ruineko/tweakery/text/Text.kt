@@ -9,7 +9,6 @@ data class Text(
     val italic: Boolean = false,
     val shadow: Boolean = false
 ) {
-
     fun encode(): String {
         return buildString {
             append("[${Tweakery.identifier}")
@@ -35,10 +34,7 @@ data class Text(
                 return Text(encoded)
             }
 
-            val metadata = encoded.substring(
-                "[$identifier:".length,
-                end
-            )
+            val metadata = encoded.substring("[$identifier:".length, end)
 
             val parts = metadata.split(":")
 
@@ -46,10 +42,7 @@ data class Text(
                 return Text(encoded)
             }
 
-            val color = parts[0]
-                .takeIf { it.isNotEmpty() }
-                ?.toULongOrNull(16)
-                ?.toInt()
+            val color = parts[0].takeIf { it.isNotEmpty() }?.toULongOrNull(16)?.toInt()
 
             return Text(
                 value = encoded.substring(end + 1),

@@ -5,9 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.network.chat.Component;
 
 public class Tweakery implements ModInitializer {
-
     public static String identifier = "tweakery";
-
     public static Component currentPlayerNameTag;
 
     @Override

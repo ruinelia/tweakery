@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AvatarRenderer.class)
 public abstract class AvatarRendererMixin {
-
     @Unique
     private static final TweakeryConfig CONFIG = TweakeryConfig.Companion.getHANDLER().instance();
 

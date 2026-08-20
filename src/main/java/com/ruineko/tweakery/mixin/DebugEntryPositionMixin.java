@@ -16,7 +16,6 @@ import java.util.List;
 
 @Mixin(DebugEntryPosition.class)
 public class DebugEntryPositionMixin {
-
     @Unique
     private static final TweakeryConfig CONFIG = TweakeryConfig.Companion.getHANDLER().instance();
 

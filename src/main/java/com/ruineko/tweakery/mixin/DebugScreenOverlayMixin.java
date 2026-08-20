@@ -1,15 +1,17 @@
 package com.ruineko.tweakery.mixin;
 
+import com.google.common.base.Strings;
 import com.ruineko.tweakery.config.DebugConfig;
 import com.ruineko.tweakery.config.TweakeryConfig;
 import com.ruineko.tweakery.text.Text;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.*;
+
+import java.awt.*;
+import java.util.List;
+import java.util.Objects;
 
 @Mixin(DebugScreenOverlay.class)
 public class DebugScreenOverlayMixin {
@@ -17,29 +19,51 @@ public class DebugScreenOverlayMixin {
     @Unique
     private static final DebugConfig DEBUG_CONFIG = TweakeryConfig.Companion.getHANDLER().instance().getDebug();
 
-    @Redirect(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
-    private void tweakery$fill(GuiGraphics instance, int i, int j, int k, int l, int m) {
-        if (DEBUG_CONFIG.getBackground()) {
-            instance.fill(i, j, k, l, m);
+    @Shadow
+    @Final
+    private Font font;
+
+    /**
+     * @author Ruineko
+     * @reason Replace vanilla rendering logic to support Tweakery text decoding
+     */
+    @Overwrite
+    private void renderLines(GuiGraphics guiGraphics, List<String> list, boolean bl) {
+        Objects.requireNonNull(this.font);
+        int lineHeight = 9;
+
+        for (int j = 0; j < list.size(); ++j) {
+            String string = list.get(j);
+
+            if (!Strings.isNullOrEmpty(string)) {
+                Text text = Text.Companion.decode(string);
+
+                int width = this.font.width(text.getValue());
+                int x = bl ? 2 : guiGraphics.guiWidth() - 2 - width;
+                int y = 2 + lineHeight * j;
+
+                if (DEBUG_CONFIG.getBackground()) {
+                    guiGraphics.fill(x - 1, y - 1, x + width + 1, y + lineHeight - 1, -1873784752);
+                }
+            }
         }
-    }
 
-    @Redirect(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V"))
-    private void tweakery$renderLines(GuiGraphics instance, Font font, String string, int i, int j, int k, boolean bl) {
-        Text text = Text.Companion.decode(string);
+        for (int j = 0; j < list.size(); ++j) {
+            String string = list.get(j);
 
-        if (text.getColor() != null) {
-            k = text.getColor();
+            if (!Strings.isNullOrEmpty(string)) {
+                Text text = Text.Companion.decode(string);
+
+                int width = this.font.width(text.getValue());
+                int x = bl ? 2 : guiGraphics.guiWidth() - 2 - width;
+                int y = 2 + lineHeight * j;
+
+                int color = text.getColor() != null ? text.getColor() : -2039584;
+
+                boolean shadow = DEBUG_CONFIG.getShadow() || text.getShadow();
+
+                guiGraphics.drawString(this.font, text.getValue(), x, y, color, shadow);
+            }
         }
-
-        if (DEBUG_CONFIG.getShadow()) {
-            bl = true;
-        }
-
-        if (!text.getValue().equals(string)) {
-            i += font.width(string) - font.width(text.getValue());
-        }
-
-        instance.drawString(font, text.getValue(), i, j, k, bl);
     }
 }

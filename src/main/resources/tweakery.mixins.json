@@ -3,11 +3,10 @@
   "minVersion": "0.8",
   "package": "com.ruineko.tweakery.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "AvatarRendererMixin",
-    "NameTagFeatureRendererMixin"
-  ],
+  "mixins": [],
   "client": [
+    "AvatarRendererMixin",
+    "NameTagFeatureRendererMixin",
     "DebugEntryPositionMixin",
     "DebugScreenOverlayMixin"
   ],

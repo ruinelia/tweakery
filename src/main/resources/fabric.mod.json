@@ -7,7 +7,9 @@
   "authors": [
     "Ruineko"
   ],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/ruinelia/tweakery"
+  },
   "license": "MIT",
   "icon": "assets/tweakery/icon.png",
   "environment": "client",

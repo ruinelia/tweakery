@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(NameTagFeatureRenderer.class)
 public abstract class NameTagFeatureRendererMixin {
-
     @Unique
     private static final Identifier WHITE_TEXTURE = Identifier.fromNamespaceAndPath("tweakery", "textures/misc/white.png");
 

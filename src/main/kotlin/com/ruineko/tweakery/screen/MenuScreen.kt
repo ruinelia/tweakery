@@ -11,7 +11,6 @@ import gg.essential.elementa.dsl.pixels
 import java.awt.Color
 
 class MenuScreen : WindowScreen(ElementaVersion.V10) {
-
     init {
         val panel = UIBlock()
             .setColor(Color(0xFF202020.toInt()))

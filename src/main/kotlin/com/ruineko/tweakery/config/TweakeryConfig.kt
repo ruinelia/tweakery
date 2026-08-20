@@ -7,7 +7,6 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.resources.Identifier
 
 class TweakeryConfig {
-
     companion object {
         val HANDLER: ConfigClassHandler<TweakeryConfig> = ConfigClassHandler.createBuilder(TweakeryConfig::class.java)
             .id(Identifier.fromNamespaceAndPath("tweakery", "config"))
