@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "tweakery",
+  "version": "${version}",
+  "name": "Tweakery",
+  "description": "A collection of thoughtful tweaks to improve the vanilla Minecraft experience.",
+  "authors": [
+    "Ruineko"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/tweakery/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.ruineko.tweakery.client.TweakeryClient"
+    ],
+    "main": [
+      "com.ruineko.tweakery.Tweakery"
+    ]
+  },
+  "mixins": [
+    "tweakery.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "yet_another_config_lib_v3": ">=3.8.2"
+  }
+}
