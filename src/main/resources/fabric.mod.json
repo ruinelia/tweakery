@@ -3,11 +3,13 @@
   "id": "tweakery",
   "version": "${version}",
   "name": "Tweakery",
-  "description": "Tweakery is a lightweight client-side mod for tweaking Minecraft to your liking.",
+  "description": "Tweakery is a lightweight client-side mod for tweaking Minecraft.",
   "authors": [
     "Ruineko"
   ],
   "contact": {
+    "homepage": "https://modrinth.com/mod/tweakery",
+    "issues": "https://github.com/ruinelia/tweakery/issues",
     "sources": "https://github.com/ruinelia/tweakery"
   },
   "license": "MIT",
