@@ -3,8 +3,6 @@ package com.ruineko.tweakery.mixin;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ruineko.tweakery.Tweakery;
 import com.ruineko.tweakery.config.NameplateConfig;
-import com.ruineko.tweakery.config.PrivacyConfig;
-import com.ruineko.tweakery.config.TweakeryConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
@@ -27,51 +25,33 @@ public abstract class NameTagFeatureRendererMixin {
     @Unique
     private static final Identifier ICON_TEXTURE = Identifier.fromNamespaceAndPath("tweakery", "textures/nameplate_icon.png");
 
-    @Unique
-    private static final float ICON_SIZE = 8.0f;
-
-    @Unique
-    private static final float GAP = 2.0f;
-
-    @Unique
-    private static final TweakeryConfig CONFIG = TweakeryConfig.Companion.getHANDLER().instance();
-
     @Redirect(method = "render(Lnet/minecraft/client/renderer/SubmitNodeCollection;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/gui/Font;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)V"))
-    private void tweakery$drawInBatch(@NonNull Font font, @NonNull Component text, float x, float y, int color, boolean shadow, Matrix4f pose, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int backgroundColor, int lightCoords) {
-        boolean isClientPlayer = text.equals(Tweakery.currentPlayerNameTag);
+    private void tweakery$drawNameplate(@NonNull Font font, @NonNull Component text, float x, float y, int color, boolean shadow, Matrix4f pose, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int backgroundColor, int lightCoords) {
+        NameplateConfig nameplateConfig = Tweakery.CONFIG.getNameplate();
 
-        String nickname = CONFIG.getPrivacy().getNickname();
-
-        /* Nickname */
-        if (isClientPlayer && !nickname.isEmpty()) {
-            int x1 = font.width(text);
-            text = Component.literal(nickname);
-            int x2 = font.width(text);
-            x += (x1 - x2) / 2.0f;
-        }
-
-        NameplateConfig nameplateConfig = CONFIG.getNameplate();
-
-        if (!nameplateConfig.getEnabled()) {
-            font.drawInBatch(text, x, y, color, shadow, pose, bufferSource, displayMode, backgroundColor, lightCoords);
+        if (!nameplateConfig.getShowNameplate()) {
             return;
         }
 
-        boolean renderIcon = isClientPlayer && nameplateConfig.getShowOwn() && (color >>> 24) != 0;
+        boolean showIcon = nameplateConfig.getShowIcon() && hasIconMarker(text) && (color >>> 24) != 0;
 
         float textWidth = font.width(text);
 
-        float paddingLeft = 2.0f;
-        float paddingRight = 1.0f;
+        float iconSize = 8.0f;
+        float gap = 2.0f;
+
+        // Vanilla padding
+        float paddingLeft = 1.0f;
+        float paddingRight = 0.0f;
 
         float offsetX = 0.0f;
 
         float iconWidth = 0.0f;
         float extraLeft = 0.0f;
 
-        if (renderIcon) {
-            iconWidth = ICON_SIZE;
-            extraLeft = iconWidth + GAP;
+        if (showIcon) {
+            iconWidth = iconSize;
+            extraLeft = iconWidth + gap + 1.0f;
 
             if (nameplateConfig.getCenter()) {
                 offsetX = extraLeft * 0.5f;
@@ -81,7 +61,7 @@ public abstract class NameTagFeatureRendererMixin {
         }
 
         /* Pass 1: Background */
-        if (nameplateConfig.getShowBackground()) {
+        if (nameplateConfig.getShowTextBackground()) {
             float backgroundLeft = x - paddingLeft + offsetX;
             float backgroundRight = x + textWidth + paddingRight + offsetX;
             float backgroundTop = y - 1.0f;
@@ -104,8 +84,8 @@ public abstract class NameTagFeatureRendererMixin {
         font.drawInBatch(Component.empty(), x + offsetX, y, 0x00000000, false, pose, bufferSource, displayMode, 0x00000000, lightCoords);
 
         /* Pass 2: Icon & Text */
-        if (renderIcon) {
-            float iconRight = x - GAP + offsetX;
+        if (showIcon) {
+            float iconRight = x - gap + offsetX;
             float iconLeft = iconRight - iconWidth;
             float iconTop = y;
             float iconBottom = y + iconWidth;
@@ -124,6 +104,21 @@ public abstract class NameTagFeatureRendererMixin {
             icon.addVertex(pose, iconLeft, iconTop, iconZ).setColor(color).setUv(0.0f, 0.0f).setLight(lightCoords);
         }
 
-        font.drawInBatch(text, x + offsetX, y, color, nameplateConfig.getShowShadow(), pose, bufferSource, displayMode, 0x00000000, lightCoords);
+        font.drawInBatch(text, x + offsetX, y, color, nameplateConfig.getShowTextShadow(), pose, bufferSource, displayMode, 0x00000000, lightCoords);
+    }
+
+    @Unique
+    private static boolean hasIconMarker(Component text) {
+        if (Tweakery.NAMEPLATE_ICON_INSERTION.equals(text.getStyle().getInsertion())) {
+            return true;
+        }
+
+        for (Component sibling : text.getSiblings()) {
+            if (hasIconMarker(sibling)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

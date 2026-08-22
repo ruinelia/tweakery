@@ -23,6 +23,9 @@ class TweakeryConfig {
     var nameplate = NameplateConfig()
 
     @SerialEntry
+    var sidebar = SidebarConfig()
+
+    @SerialEntry
     var privacy = PrivacyConfig()
 
     @SerialEntry

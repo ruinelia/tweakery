@@ -4,7 +4,7 @@ import dev.isxander.yacl3.config.v2.api.SerialEntry
 
 class NameplateConfig {
     @SerialEntry
-    var enabled: Boolean = true
+    var showNameplate = true
 
     @SerialEntry
     var showOwn: Boolean = true
@@ -13,10 +13,10 @@ class NameplateConfig {
     var showIcon: Boolean = true
 
     @SerialEntry
-    var showShadow: Boolean = true
+    var showTextShadow: Boolean = true
 
     @SerialEntry
-    var showBackground: Boolean = true
+    var showTextBackground: Boolean = true
 
     @SerialEntry
     var center: Boolean = true

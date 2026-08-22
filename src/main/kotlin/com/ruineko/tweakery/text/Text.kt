@@ -5,51 +5,47 @@ import com.ruineko.tweakery.Tweakery
 data class Text(
     val value: String,
     val color: Int? = null,
-    val bold: Boolean = false,
-    val italic: Boolean = false,
     val shadow: Boolean = false
 ) {
     fun encode(): String {
         return buildString {
-            append("[${Tweakery.identifier}")
-            append(":")
+            append("[${Tweakery.MOD_ID}$SEPARATOR")
+            append(value)
+            append(SEPARATOR)
             append(color?.toUInt()?.toString(16)?.padStart(8, '0') ?: "")
-            append(":")
-            append(bold)
-            append(":")
-            append(italic)
-            append(":")
+            append(SEPARATOR)
             append(shadow)
             append("]")
-            append(value)
         }
     }
 
     companion object {
+        private const val SEPARATOR = '\u001F'
+
         fun decode(encoded: String): Text {
             val end = encoded.indexOf(']')
-            val identifier = Tweakery.identifier
+            val prefix = "[${Tweakery.MOD_ID}$SEPARATOR"
 
-            if (!encoded.startsWith("[$identifier:") || end == -1) {
+            if (!encoded.startsWith(prefix) || end == -1) {
                 return Text(encoded)
             }
 
-            val metadata = encoded.substring("[$identifier:".length, end)
+            val metadata = encoded.substring(prefix.length, end)
+            val parts = metadata.split(SEPARATOR)
 
-            val parts = metadata.split(":")
-
-            if (parts.size != 4) {
+            if (parts.size != 3) {
                 return Text(encoded)
             }
 
-            val color = parts[0].takeIf { it.isNotEmpty() }?.toULongOrNull(16)?.toInt()
+            val color = parts[1]
+                .takeIf { it.isNotEmpty() }
+                ?.toUIntOrNull(16)
+                ?.toInt()
 
             return Text(
-                value = encoded.substring(end + 1),
+                value = parts[0],
                 color = color,
-                bold = parts[1].toBoolean(),
-                italic = parts[2].toBoolean(),
-                shadow = parts[3].toBoolean()
+                shadow = parts[2].toBoolean()
             )
         }
     }

@@ -5,10 +5,16 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
+    "PlayerMixin",
+
     "AvatarRendererMixin",
+
     "NameTagFeatureRendererMixin",
+
     "DebugEntryPositionMixin",
-    "DebugScreenOverlayMixin"
+    "DebugScreenOverlayMixin",
+
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

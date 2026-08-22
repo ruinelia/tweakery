@@ -6,20 +6,25 @@
   "config.tweakery.title": "Tweakery",
 
   "config.tweakery.category.nameplate": "Nameplate",
-  "config.tweakery.nameplate.enable": "Enable",
+  "config.tweakery.nameplate.show_nameplate": "Show Nameplate",
   "config.tweakery.nameplate.show_own": "Show Own Nameplate",
   "config.tweakery.nameplate.show_icon": "Show Tweakery Icon",
-  "config.tweakery.nameplate.show_shadow": "Show Shadow",
-  "config.tweakery.nameplate.show_background": "Show Background",
   "config.tweakery.nameplate.center": "Center Nameplate",
+
+  "config.tweakery.category.sidebar": "Sidebar",
+  "config.tweakery.sidebar.show_sidebar": "Show Sidebar",
 
   "config.tweakery.category.privacy": "Privacy",
   "config.tweakery.privacy.nickname": "Nickname",
   "config.tweakery.privacy.hide_coordinates": "Hide Coordinates",
 
   "config.tweakery.category.debug": "Debug",
-  "config.tweakery.debug.show_shadow": "Show Shadow",
-  "config.tweakery.debug.show_background": "Show Background",
+
+  "config.tweakery.common.enable": "Enable",
+  "config.tweakery.common.disable": "Disable",
+
+  "config.tweakery.common.show_text_shadow": "Show Text Shadow",
+  "config.tweakery.common.show_text_background": "Show Text Background",
 
   "debug.tweakery.coordinates_protected": "Coordinates are protected by Tweakery",
   "debug.tweakery.coordinates_protected_hint": "Disable \"Hide Coordinates\" to show position information"

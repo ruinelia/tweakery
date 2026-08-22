@@ -3,7 +3,7 @@
   "id": "tweakery",
   "version": "${version}",
   "name": "Tweakery",
-  "description": "A collection of thoughtful tweaks to improve the vanilla Minecraft experience.",
+  "description": "Tweakery is a lightweight client-side mod for tweaking Minecraft to your liking.",
   "authors": [
     "Ruineko"
   ],
