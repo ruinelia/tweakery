@@ -26,6 +26,9 @@ class TweakeryConfig {
     var sidebar = SidebarConfig()
 
     @SerialEntry
+    var zoom = ZoomConfig()
+
+    @SerialEntry
     var privacy = PrivacyConfig()
 
     @SerialEntry

@@ -11,6 +11,8 @@
 
     "NameTagFeatureRendererMixin",
 
+    "GameRendererMixin",
+
     "DebugEntryPositionMixin",
     "DebugScreenOverlayMixin",
 

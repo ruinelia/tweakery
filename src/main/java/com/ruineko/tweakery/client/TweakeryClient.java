@@ -1,6 +1,8 @@
 package com.ruineko.tweakery.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.ruineko.tweakery.Tweakery;
+import com.ruineko.tweakery.feature.Zoom;
 import com.ruineko.tweakery.screen.ConfigScreen;
 import com.ruineko.tweakery.screen.MenuScreen;
 import net.fabricmc.api.ClientModInitializer;
@@ -11,7 +13,16 @@ import net.minecraft.resources.Identifier;
 
 public class TweakeryClient implements ClientModInitializer {
     private static final KeyMapping.Category TWEAKERY_CATEGORY = KeyMapping.Category.register(
-            Identifier.fromNamespaceAndPath("tweakery", "category")
+            Identifier.fromNamespaceAndPath(Tweakery.MOD_ID, "category")
+    );
+
+    public static final KeyMapping ZOOM_KEY = KeyBindingHelper.registerKeyBinding(
+            new KeyMapping(
+                    "key.tweakery.zoom",
+                    InputConstants.Type.KEYSYM,
+                    InputConstants.KEY_C,
+                    TWEAKERY_CATEGORY
+            )
     );
 
     public static final KeyMapping OPEN_CONFIG_KEY = KeyBindingHelper.registerKeyBinding(
@@ -35,6 +46,8 @@ public class TweakeryClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            Zoom.INSTANCE.tick(ZOOM_KEY.isDown());
+
             while (OPEN_CONFIG_KEY.consumeClick()) {
                 client.setScreen(ConfigScreen.create(client.screen));
             }

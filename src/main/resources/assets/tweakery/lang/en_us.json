@@ -1,18 +1,25 @@
 {
   "key.category.tweakery.category": "Tweakery",
+  "key.tweakery.zoom": "Zoom",
   "key.tweakery.open_config": "Open Tweakery Config",
   "key.tweakery.open_menu": "Open Tweakery Menu",
 
   "config.tweakery.title": "Tweakery",
 
-  "config.tweakery.category.nameplate": "Nameplate",
-  "config.tweakery.nameplate.show_nameplate": "Show Nameplate",
-  "config.tweakery.nameplate.show_own": "Show Own Nameplate",
-  "config.tweakery.nameplate.show_icon": "Show Tweakery Icon",
-  "config.tweakery.nameplate.center": "Center Nameplate",
+  "config.tweakery.category.hud": "HUD",
+  "config.tweakery.hud.nameplate": "Nameplate",
+  "config.tweakery.hud.nameplate.show": "Show Nameplate",
+  "config.tweakery.hud.nameplate.show_own": "Show Own Nameplate",
+  "config.tweakery.hud.nameplate.show_icon": "Show Tweakery Icon",
+  "config.tweakery.hud.nameplate.center": "Center Nameplate",
+  "config.tweakery.hud.sidebar": "Sidebar",
+  "config.tweakery.hud.sidebar.show": "Show Sidebar",
 
-  "config.tweakery.category.sidebar": "Sidebar",
-  "config.tweakery.sidebar.show_sidebar": "Show Sidebar",
+  "config.tweakery.category.zoom": "Zoom",
+  "config.tweakery.zoom.factor": "Zoom Factor",
+  "config.tweakery.zoom.speed": "Zoom Speed",
+  "config.tweakery.zoom.smooth": "Smooth Zoom",
+  "config.tweakery.zoom.cinematic": "Cinematic Camera",
 
   "config.tweakery.category.privacy": "Privacy",
   "config.tweakery.privacy.nickname": "Nickname",
@@ -22,7 +29,6 @@
 
   "config.tweakery.common.enable": "Enable",
   "config.tweakery.common.disable": "Disable",
-
   "config.tweakery.common.show_text_shadow": "Show Text Shadow",
   "config.tweakery.common.show_text_background": "Show Text Background",
 
