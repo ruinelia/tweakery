@@ -6,16 +6,11 @@
   "mixins": [],
   "client": [
     "PlayerMixin",
-
     "AvatarRendererMixin",
-
     "NameTagFeatureRendererMixin",
-
     "GameRendererMixin",
-
     "DebugEntryPositionMixin",
     "DebugScreenOverlayMixin",
-
     "GuiMixin"
   ],
   "injectors": {

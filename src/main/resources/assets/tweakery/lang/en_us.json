@@ -2,15 +2,24 @@
   "key.category.tweakery.category": "Tweakery",
   "key.tweakery.zoom": "Zoom",
   "key.tweakery.open_config": "Open Tweakery Config",
-  "key.tweakery.open_menu": "Open Tweakery Menu",
+  "key.tweakery.open_menu": "Do Not Bind This Key",
 
   "config.tweakery.title": "Tweakery",
+
+  "config.tweakery.category.player": "Player",
+  "config.tweakery.player.display_name": "Display Name",
+  "config.tweakery.player.team": "Team",
+  "config.tweakery.player.team.override": "Team",
+  "config.tweakery.player.team.color": "Team Color",
+  "config.tweakery.player.team.prefix": "Team Prefix",
+  "config.tweakery.player.team.suffix": "Team Suffix",
 
   "config.tweakery.category.hud": "HUD",
   "config.tweakery.hud.nameplate": "Nameplate",
   "config.tweakery.hud.nameplate.show": "Show Nameplate",
   "config.tweakery.hud.nameplate.show_own": "Show Own Nameplate",
-  "config.tweakery.hud.nameplate.show_icon": "Show Tweakery Icon",
+  "config.tweakery.hud.nameplate.show_icon": "Show Icon",
+  "config.tweakery.hud.nameplate.icon_url": "Icon URL",
   "config.tweakery.hud.nameplate.center": "Center Nameplate",
   "config.tweakery.hud.sidebar": "Sidebar",
   "config.tweakery.hud.sidebar.show": "Show Sidebar",
@@ -22,8 +31,9 @@
   "config.tweakery.zoom.cinematic": "Cinematic Camera",
 
   "config.tweakery.category.privacy": "Privacy",
-  "config.tweakery.privacy.nickname": "Nickname",
   "config.tweakery.privacy.hide_coordinates": "Hide Coordinates",
+  "config.tweakery.privacy.fake_rank.enable": "Enable Fake Rank",
+  "config.tweakery.privacy.fake_rank.rank": "Fake Rank",
 
   "config.tweakery.category.debug": "Debug",
 

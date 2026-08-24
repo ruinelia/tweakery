@@ -10,13 +10,16 @@ class NameplateConfig {
     var showOwn: Boolean = true
 
     @SerialEntry
-    var showIcon: Boolean = true
-
-    @SerialEntry
     var showTextShadow: Boolean = true
 
     @SerialEntry
     var showTextBackground: Boolean = true
+
+    @SerialEntry
+    var showIcon: Boolean = true
+
+    @SerialEntry
+    var iconUrl: String = ""
 
     @SerialEntry
     var center: Boolean = true

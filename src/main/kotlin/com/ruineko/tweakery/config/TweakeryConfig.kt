@@ -20,6 +20,9 @@ class TweakeryConfig {
     }
 
     @SerialEntry
+    var player = PlayerConfig()
+
+    @SerialEntry
     var nameplate = NameplateConfig()
 
     @SerialEntry

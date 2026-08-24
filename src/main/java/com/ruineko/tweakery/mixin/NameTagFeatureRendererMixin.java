@@ -3,6 +3,9 @@ package com.ruineko.tweakery.mixin;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ruineko.tweakery.Tweakery;
 import com.ruineko.tweakery.config.NameplateConfig;
+import com.ruineko.tweakery.feature.NameplateIcon;
+import com.ruineko.tweakery.record.PlayerPresence;
+import com.ruineko.tweakery.serializer.JsonSerializer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
@@ -20,10 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(NameTagFeatureRenderer.class)
 public abstract class NameTagFeatureRendererMixin {
     @Unique
-    private static final Identifier WHITE_TEXTURE = Identifier.fromNamespaceAndPath("tweakery", "textures/misc/white.png");
-
-    @Unique
-    private static final Identifier ICON_TEXTURE = Identifier.fromNamespaceAndPath("tweakery", "textures/nameplate_icon.png");
+    private static final Identifier WHITE_TEXTURE = Identifier.fromNamespaceAndPath(Tweakery.MOD_ID, "textures/misc/white.png");
 
     @Redirect(method = "render(Lnet/minecraft/client/renderer/SubmitNodeCollection;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/gui/Font;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;drawInBatch(Lnet/minecraft/network/chat/Component;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)V"))
     private void tweakery$drawNameplate(@NonNull Font font, @NonNull Component text, float x, float y, int color, boolean shadow, Matrix4f pose, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int backgroundColor, int lightCoords) {
@@ -33,16 +33,15 @@ public abstract class NameTagFeatureRendererMixin {
             return;
         }
 
-        boolean showIcon = nameplateConfig.getShowIcon() && hasIconMarker(text) && (color >>> 24) != 0;
+        boolean showIcon = nameplateConfig.getShowIcon() && hasPresence(text) && (color >>> 24) != 0;
 
         float textWidth = font.width(text);
 
         float iconSize = 8.0f;
         float gap = 2.0f;
 
-        // Vanilla padding
-        float paddingLeft = 1.0f;
-        float paddingRight = 0.0f;
+        float paddingLeft = 2.0f;
+        float paddingRight = 1.0f;
 
         float offsetX = 0.0f;
 
@@ -51,7 +50,7 @@ public abstract class NameTagFeatureRendererMixin {
 
         if (showIcon) {
             iconWidth = iconSize;
-            extraLeft = iconWidth + gap + 1.0f;
+            extraLeft = iconWidth + gap;
 
             if (nameplateConfig.getCenter()) {
                 offsetX = extraLeft * 0.5f;
@@ -91,10 +90,12 @@ public abstract class NameTagFeatureRendererMixin {
             float iconBottom = y + iconWidth;
             float iconZ = 0.0f;
 
+            Identifier iconTexture = NameplateIcon.Companion.getTexture();
+
             RenderType iconType = switch (displayMode) {
-                case NORMAL -> RenderTypes.text(ICON_TEXTURE);
-                case SEE_THROUGH -> RenderTypes.textSeeThrough(ICON_TEXTURE);
-                case POLYGON_OFFSET -> RenderTypes.textPolygonOffset(ICON_TEXTURE);
+                case NORMAL -> RenderTypes.text(iconTexture);
+                case SEE_THROUGH -> RenderTypes.textSeeThrough(iconTexture);
+                case POLYGON_OFFSET -> RenderTypes.textPolygonOffset(iconTexture);
             };
 
             VertexConsumer icon = bufferSource.getBuffer(iconType);
@@ -108,17 +109,17 @@ public abstract class NameTagFeatureRendererMixin {
     }
 
     @Unique
-    private static boolean hasIconMarker(Component text) {
-        if (Tweakery.NAMEPLATE_ICON_INSERTION.equals(text.getStyle().getInsertion())) {
-            return true;
-        }
+    private static boolean hasPresence(Component text) {
+        String insertion = text.getStyle().getInsertion();
 
-        for (Component sibling : text.getSiblings()) {
-            if (hasIconMarker(sibling)) {
+        if (insertion != null) {
+            PlayerPresence presence = JsonSerializer.deserialize(Tweakery.MOD_ID, insertion, PlayerPresence.class);
+
+            if (presence != null && presence.getOnline()) {
                 return true;
             }
         }
 
-        return false;
+        return text.getSiblings().stream().anyMatch(NameTagFeatureRendererMixin::hasPresence);
     }
 }

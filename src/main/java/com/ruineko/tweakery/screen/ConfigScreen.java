@@ -1,11 +1,10 @@
 package com.ruineko.tweakery.screen;
 
 import com.ruineko.tweakery.config.*;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import com.ruineko.tweakery.feature.NameplateIcon;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.StringControllerBuilder;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,14 +16,49 @@ public class ConfigScreen {
     public static Screen create(Screen parent) {
         TweakeryConfig config = TweakeryConfig.Companion.getHANDLER().instance();
 
-        ZoomConfig zoomConfig = config.getZoom();
+        PlayerConfig playerConfig = config.getPlayer();
         NameplateConfig nameplateConfig = config.getNameplate();
         SidebarConfig sidebarConfig = config.getSidebar();
+        ZoomConfig zoomConfig = config.getZoom();
         PrivacyConfig privacyConfig = config.getPrivacy();
         DebugConfig debugConfig = config.getDebug();
 
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("config.tweakery.title"))
+                .category(ConfigCategory.createBuilder()
+                        .name(Component.translatable("config.tweakery.category.player"))
+                        .option(Option.<String>createBuilder()
+                                .name(Component.translatable("config.tweakery.player.display_name"))
+                                .binding("", playerConfig::getDisplayName, playerConfig::setDisplayName)
+                                .controller(StringControllerBuilder::create)
+                                .build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Component.translatable("config.tweakery.player.team"))
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Component.translatable("config.tweakery.player.team.override"))
+                                        .binding(false, playerConfig::getOverrideTeam, playerConfig::setOverrideTeam)
+                                        .controller(BooleanControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Component.translatable("config.tweakery.player.team.color"))
+                                        .binding(Color.WHITE, playerConfig::getTeamColor, playerConfig::setTeamColor)
+                                        .controller(ColorControllerBuilder::create)
+                                        .available(playerConfig.getOverrideTeam())
+                                        .build())
+                                .option(Option.<String>createBuilder()
+                                        .name(Component.translatable("config.tweakery.player.team.prefix"))
+                                        .binding("", playerConfig::getTeamPrefix, playerConfig::setTeamPrefix)
+                                        .controller(StringControllerBuilder::create)
+                                        .available(playerConfig.getOverrideTeam())
+                                        .build())
+                                .option(Option.<String>createBuilder()
+                                        .name(Component.translatable("config.tweakery.player.team.suffix"))
+                                        .binding("", playerConfig::getTeamSuffix, playerConfig::setTeamSuffix)
+                                        .controller(StringControllerBuilder::create)
+                                        .available(playerConfig.getOverrideTeam())
+                                        .build())
+                                .build())
+                        .build())
                 .category(ConfigCategory.createBuilder()
                         .name(Component.translatable("config.tweakery.category.hud"))
                         .group(OptionGroup.createBuilder()
@@ -38,26 +72,37 @@ public class ConfigScreen {
                                         .name(Component.translatable("config.tweakery.hud.nameplate.show_own"))
                                         .binding(true, nameplateConfig::getShowOwn, nameplateConfig::setShowOwn)
                                         .controller(BooleanControllerBuilder::create)
-                                        .build())
-                                .option(Option.<Boolean>createBuilder()
-                                        .name(Component.translatable("config.tweakery.hud.nameplate.show_icon"))
-                                        .binding(true, nameplateConfig::getShowIcon, nameplateConfig::setShowIcon)
-                                        .controller(BooleanControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate())
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Component.translatable("config.tweakery.common.show_text_shadow"))
                                         .binding(true, nameplateConfig::getShowTextShadow, nameplateConfig::setShowTextShadow)
                                         .controller(BooleanControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate())
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Component.translatable("config.tweakery.common.show_text_background"))
                                         .binding(true, nameplateConfig::getShowTextBackground, nameplateConfig::setShowTextBackground)
                                         .controller(BooleanControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate())
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Component.translatable("config.tweakery.hud.nameplate.show_icon"))
+                                        .binding(true, nameplateConfig::getShowIcon, nameplateConfig::setShowIcon)
+                                        .controller(BooleanControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate())
+                                        .build())
+                                .option(Option.<String>createBuilder()
+                                        .name(Component.translatable("config.tweakery.hud.nameplate.icon_url"))
+                                        .binding("", nameplateConfig::getIconUrl, nameplateConfig::setIconUrl)
+                                        .controller(StringControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate() && nameplateConfig.getShowIcon())
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Component.translatable("config.tweakery.hud.nameplate.center"))
                                         .binding(true, nameplateConfig::getCenter, nameplateConfig::setCenter)
                                         .controller(BooleanControllerBuilder::create)
+                                        .available(nameplateConfig.getShowNameplate())
                                         .build())
                                 .build())
                         .group(OptionGroup.createBuilder()
@@ -71,11 +116,13 @@ public class ConfigScreen {
                                         .name(Component.translatable("config.tweakery.common.show_text_shadow"))
                                         .binding(true, sidebarConfig::getShowTextShadow, sidebarConfig::setShowTextShadow)
                                         .controller(BooleanControllerBuilder::create)
+                                        .available(sidebarConfig.getShowSidebar())
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Component.translatable("config.tweakery.common.show_text_background"))
                                         .binding(true, sidebarConfig::getShowTextBackground, sidebarConfig::setShowTextBackground)
                                         .controller(BooleanControllerBuilder::create)
+                                        .available(sidebarConfig.getShowSidebar())
                                         .build())
                                 .build())
                         .build())
@@ -108,11 +155,6 @@ public class ConfigScreen {
                         .build())
                 .category(ConfigCategory.createBuilder()
                         .name(Component.translatable("config.tweakery.category.privacy"))
-                        .option(Option.<String>createBuilder()
-                                .name(Component.translatable("config.tweakery.privacy.nickname"))
-                                .binding("", privacyConfig::getNickname, privacyConfig::setNickname)
-                                .controller(StringControllerBuilder::create)
-                                .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Component.translatable("config.tweakery.privacy.hide_coordinates"))
                                 .binding(false, privacyConfig::getHideCoordinates, privacyConfig::setHideCoordinates)
@@ -132,7 +174,10 @@ public class ConfigScreen {
                                 .controller(BooleanControllerBuilder::create)
                                 .build())
                         .build())
-                .save(TweakeryConfig.Companion.getHANDLER()::save)
+                .save(() -> {
+                    TweakeryConfig.Companion.getHANDLER().save();
+                    NameplateIcon.Companion.reload();
+                })
                 .build()
                 .generateScreen(parent);
     }
